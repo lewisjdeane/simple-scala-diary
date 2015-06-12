@@ -50,21 +50,27 @@ object Tools {
 		Sets up the directory where all entries will be saved.
 	*/
 	def setupEntryDirectory(): Unit = {
-		var file: File = new File(".")
-		var files: Array[File] = file.listFiles()
-
-		for (f <- files) {
-			if (f.getName() == FOLDER_TITLE) return
-		}
+		if (directoryExists) return
 
 		var dir: File = new File(FOLDER_TITLE)
 		dir.mkdir()
 	}
 
+	def directoryExists: Boolean = {
+		var file: File = new File(".")
+		var files: Array[File] = file.listFiles()
+
+		for (f <- files) {
+			if (f.getName() == FOLDER_TITLE) true
+		}
+
+		false
+	}
+
 	/*
 		Wipes the directory when a new password is set up.
 	*/
-	def clearEntryDirectory(): Unit = {
+	def clearEntryDirectory(): Unit = if (directoryExists) {
 		var file: File = new File(FOLDER_TITLE)
 
 		if (file.list().length == 0) file.delete()
